@@ -27,6 +27,7 @@ var srcPath = __dirname + '/../../../lib/',
     mockedApplication,
     mockedDevice,
     mockedQnx,
+    mockedWp,
     mock_request = {
         url: "http://www.dummy.com",
         allow: jasmine.createSpy(),
@@ -68,24 +69,32 @@ describe("framework", function () {
             callExtensionMethod : function () {
                 return 42;
             },
-            webplatform : {
-                getController : function () {
-                    return mockedController;
-                },
-                getApplication : function () {
-                    return mockedApplication;
-                },
-                getApplicationWindow : function () {
-                    return mockedApplicationWindow;
-                },
-                device : mockedDevice,
-                nativeCall: jasmine.createSpy("qnx.webplatform.nativeCall")
-            }
+        };
+        mockedWp =  {
+            getController : function () {
+                return mockedController;
+            },
+            getApplication : function () {
+                return mockedApplication;
+            },
+            getApplicationWindow : function () {
+                return mockedApplicationWindow;
+            },
+            device : mockedDevice,
+            ui: {
+                init: jasmine.createSpy(),
+                default: {
+                    setDefaultFont: jasmine.createSpy()
+                }
+            },
+            nativeCall: jasmine.createSpy("wp.nativeCall")
         };
         GLOBAL.window = {
-            qnx: mockedQnx
+            qnx: mockedQnx,
+            wp: mockedWp
         };
         GLOBAL.qnx = mockedQnx;
+        GLOBAL.wp = mockedWp;
         GLOBAL.NamedNodeMap = function () {};
 
         delete require.cache[require.resolve(srcPath + "webview")];
@@ -140,6 +149,7 @@ describe("framework", function () {
         delete GLOBAL.blackberry;
         delete GLOBAL.window;
         delete GLOBAL.qnx;
+        delete GLOBAL.wp;
         delete GLOBAL.NamedNodeMap;
     });
 
@@ -183,11 +193,11 @@ describe("framework", function () {
             expect(overlayWebView.setURL).toHaveBeenCalledWith("local:///chrome/ui.html");
         });
 
-        it('calls renderContextMenuFor passing the webview', function () {
+        xit('calls renderContextMenuFor passing the webview', function () {
             expect(overlayWebView.renderContextMenuFor).toHaveBeenCalledWith(webview);
         });
 
-        it('calls handleDialogFor passing the webview', function () {
+        xit('calls handleDialogFor passing the webview', function () {
             expect(overlayWebView.handleDialogFor).toHaveBeenCalledWith(webview);
         });
 
@@ -300,7 +310,7 @@ describe("framework", function () {
             var flag = false;
             spyOn(overlayWebView, "showDialog");
 
-            window.qnx.webplatform.device.getNetworkInterfaces = function (callback) {
+            window.wp.device.getNetworkInterfaces = function (callback) {
                 callback();
                 flag = true;
             };
@@ -319,7 +329,7 @@ describe("framework", function () {
             messageObj;
             spyOn(overlayWebView, "showDialog");
 
-            window.qnx.webplatform.device.getNetworkInterfaces = function (callback) {
+            window.wp.device.getNetworkInterfaces = function (callback) {
                 var dummyData = {
                     asix0i : null,
                     bb0 : null,
@@ -416,13 +426,13 @@ describe("framework", function () {
         it('does nothing when enablePopupBlocker is true', function () {
             config.enablePopupBlocker = true;
             framework.start();
-            expect(mockedQnx.webplatform.nativeCall).not.toHaveBeenCalledWith('webview.setBlockPopups', webview.id, false);
+            expect(mockedWp.nativeCall).not.toHaveBeenCalledWith('webview.setBlockPopups', webview.id, false);
         });
 
         it('Disables popupblocker when enablePopupBlocker is false', function () {
             config.enablePopupBlocker = false;
             framework.start();
-            expect(mockedQnx.webplatform.nativeCall).toHaveBeenCalledWith('webview.setBlockPopups', webview.id, false);
+            expect(mockedWp.nativeCall).toHaveBeenCalledWith('webview.setBlockPopups', webview.id, false);
         });
     });
 
