@@ -96,7 +96,8 @@ var _self = {
             overlayWebView.create(function () {
                 overlayWebView.addEventListener("DocumentLoadFinished", showUrlCallback);
                 overlayWebView.addEventListener("DocumentLoadFinished", function () {
-                    wp.ui.init(overlayWebView.getWebViewObj(), webview.getWebViewObj());
+                    var excludeList = config.enableFormControl ? [] : ["formcontrol"];
+                    wp.ui.init(overlayWebView.getWebViewObj(), webview.getWebViewObj(), {exclude: excludeList});
                     wp.ui.default.setDefaultFont();
                 });
 
