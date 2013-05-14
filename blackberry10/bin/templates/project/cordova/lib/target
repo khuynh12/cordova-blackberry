@@ -40,6 +40,7 @@ function isValidIp(ip) {
         ipArray;
 
     if (typeof ip !== 'string') {
+        console.log(commander.helpInformation());
         throw "IP is required";
     } else {
         ipArray = ip.split('.');
@@ -60,6 +61,7 @@ function isValidType(type) {
     var result = true;
 
     if (typeof type !== 'string') {
+        console.log(commander.helpInformation());
         throw "target type is required";
     }
     else if (!(type === 'device' || type === 'simulator')) {
@@ -96,6 +98,7 @@ commander
     .description("Add specified target")
     .action(function () {
         if (commander.args.length === 1) {
+            console.log(commander.helpInformation());
             throw "Target details not specified";
         }
         name = commander.args[0];
@@ -108,12 +111,15 @@ commander
             pin = commander.pin;
         }
         if (!isValidIp(ip)) {
+            console.log(commander.helpInformation());
             throw "Invalid IP: " + ip;
         }
         if (!isValidType(type)) {
+            console.log(commander.helpInformation());
             throw "Invalid target type: " + type;
         }
         if (!isValidPin(pin)) {
+            console.log(commander.helpInformation());
             throw "Invalid PIN: " + pin;
         }
         if (properties.targets.hasOwnProperty(name)) {
@@ -159,7 +165,8 @@ commander
 commander
     .command('*')
     .action(function () {
-        throw 'Unrecognized command';
+        console.log('Unrecognized command');
+        console.log(commander.helpInformation());
     });
 
 

@@ -1,4 +1,4 @@
-/*
+ /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
  * distributed with this work for additional information
@@ -52,15 +52,19 @@ var build,
 
     function validate() {
         if (!project_path) {
+            help();
             throw "You must give a project PATH";
         }
         if (fs.existsSync(project_path)) {
+            help();
             throw "The project path must be an empty directory";
         }
         if (!validPackageName(app_id)) {
+            help();
             throw "App ID must be sequence of alpha-numeric (optionally seperated by '.') characters, no longer than 50 characters";
         }
         if (!validBarName(bar_name)) {
+            help();
             throw "BAR filename can only contain alpha-numeric, '.', '-' and '_' characters";
         }
     }
@@ -145,10 +149,14 @@ var build,
         }
     }
 
-    if ( process.argv[2] === "-h" || process.argv[2] === "--help" ) {
+    function help() {
         console.log("\nUsage: create <project path> [package name [BAR filename]] \n");
         console.log("Options: \n");
         console.log("   -h, --help      output usage information \n");
+    }
+
+    if ( process.argv[2] === "-h" || process.argv[2] === "--help" ) {
+        help();
     } else {
         try {
             build = jWorkflow.order(validate)

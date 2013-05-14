@@ -95,6 +95,7 @@ function doReleaseBuild() {
         bbwpArgv.push("--password");
         bbwpArgv.push( projectProperties.keystorepass);
     } else {
+        console.log(command.helpInformation());
         throw "No signing password provided. Please use --keystorepass via command-line or enter a value for keystorepass in project.json";
     }
 
