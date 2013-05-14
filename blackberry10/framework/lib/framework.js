@@ -101,13 +101,14 @@ var _self = {
                     wp.ui.default.setDefaultFont();
                 });
 
+                webview.setUIWebViewObj(overlayWebView.getWebViewObj());
 
                 overlayWebView.setURL("local:///chrome/ui.html");
                 //overlayWebView.renderContextMenuFor(webview);
                 //overlayWebView.handleDialogFor(webview);
                 controllerWebView.dispatchEvent('ui.init', null);
-                webview.setUIWebViewObj(overlayWebView.getWebViewObj());
                 if (config.enableChildWebView) {
+                    console.log("childWebView: " + config.enableChildWebView);
                     overlayWebView.bindAppWebViewToChildWebViewControls(webview);
                 } else {
                     webview.onChildWindowOpen = function (data) {

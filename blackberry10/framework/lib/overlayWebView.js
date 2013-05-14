@@ -22,7 +22,7 @@ webview =
     {
 
     create: function (ready, configSettings) {
-        _webviewObj = wp.createWebView(function () {
+        _webviewObj = wp.createWebView({ui:true/*shim*/}, function () {
 
             _webviewObj.visible = true;
             _webviewObj.active = true;
@@ -85,13 +85,13 @@ webview =
     },
 
     bindAppWebViewToChildWebViewControls: function (appWebView) {
-        if (_webviewObj && _webviewObj.childwebviewcontrols) {
-            _webviewObj.childwebviewcontrols.subscribeTo(appWebView);
+        if (wp.ui.childwebviewcontrols) {
+            wp.ui.childwebviewcontrols.subscribeTo(appWebView);
         }
     },
 
     renderContextMenuFor: function (targetWebView) {
-        return _webviewObj.contextMenu.subscribeTo(targetWebView);
+        return wp.ui.contextmenu.subscribeTo(targetWebView);
     },
 
     handleDialogFor: function (targetWebView) {
